@@ -2,6 +2,8 @@
 
 Aplicação back-end em Node.js com TypeScript que consulta a [PokeAPI](https://pokeapi.co/) e gerencia um catálogo local de Pokémon via terminal.
 
+A cada execução, **5 Pokémon são sorteados aleatoriamente** entre os 151 da geração 1 — a lista muda toda vez que você roda o projeto.
+
 ---
 
 ## Objetivo
@@ -47,17 +49,7 @@ npm install
 npm run start
 ```
 
-Ou em modo desenvolvimento:
-
-```bash
-npm run dev
-```
-
-Para compilar o TypeScript:
-
-```bash
-npm run build
-```
+A cada execução, 5 Pokémon diferentes são sorteados automaticamente da geração 1.
 
 ---
 
@@ -67,7 +59,7 @@ npm run build
 /pokedex-typescript-lite
 │
 ├── src/
-│   ├── main.ts                        # Ponto de entrada — instancia serviços e demonstra o fluxo
+│   ├── main.ts                        # Ponto de entrada — sorteia Pokémon e demonstra o fluxo
 │   ├── controllers/
 │   │   └── TerminalController.ts      # Orquestra operações e exibições no terminal
 │   ├── services/
@@ -87,15 +79,26 @@ npm run build
 
 ---
 
+## Como funciona o sorteio
+
+No `main.ts` existe uma lista com todos os 151 Pokémon da geração 1. A cada execução:
+
+1. A lista é embaralhada com `.sort(() => Math.random() - 0.5)`
+2. Os 5 primeiros são selecionados com `.slice(0, 5)`
+3. O programa busca cada um na PokeAPI e adiciona ao catálogo
+
+---
+
 ## Funcionalidades
 
 | Funcionalidade | Descrição |
 |---|---|
+| Sorteio aleatório | 5 Pokémon diferentes a cada execução |
 | Buscar Pokémon | Consulta a PokeAPI por nome ou ID |
 | Adicionar ao catálogo | Adiciona o Pokémon, impedindo duplicatas |
 | Listar catálogo | Exibe todos os Pokémon salvos |
 | Remover por ID | Remove um Pokémon específico pelo ID |
-| Filtrar por tipo | Lista Pokémon de um tipo específico |
+| Remover por nome | Remove um Pokémon específico pelo nome |
 | Estatísticas | Peso total, contagem e validações |
 | Tratamento de erros | Erros de API e entradas inválidas tratados com try/catch |
 
@@ -103,17 +106,39 @@ npm run build
 
 ## Exemplos de Execução
 
-### Busca válida
-
-**Entrada testada:**
-```
-pikachu
-```
+### Sorteio e busca (resultado varia a cada execução)
 
 **Saída esperada:**
 ```
-[OK] Pokémon encontrado: pikachu
-[OK] pikachu adicionado ao catálogo.
+===========================================
+       Pokédex TypeScript Lite 🎮         
+===========================================
+
+>> Pokémon sorteados para esta sessão: haunter, tauros, eevee, poliwag, arcanine
+
+>> Buscando Pokémon...
+
+[OK] Pokémon encontrado: haunter
+[OK] haunter adicionado ao catálogo.
+[OK] Pokémon encontrado: tauros
+[OK] tauros adicionado ao catálogo.
+[OK] Pokémon encontrado: eevee
+[OK] eevee adicionado ao catálogo.
+[OK] Pokémon encontrado: poliwag
+[OK] poliwag adicionado ao catálogo.
+[OK] Pokémon encontrado: arcanine
+[OK] arcanine adicionado ao catálogo.
+```
+
+---
+
+### Duplicidade (testa com o primeiro sorteado)
+
+**Saída esperada:**
+```
+>> Tentando adicionar haunter novamente...
+[OK] Pokémon encontrado: haunter
+[AVISO] haunter já está no catálogo.
 ```
 
 ---
@@ -132,58 +157,16 @@ pokemon-inexistente
 
 ---
 
-### Duplicidade
-
-**Entrada testada:**
-```
-adicionar pikachu duas vezes
-```
-
-**Saída esperada:**
-```
-[OK] pikachu adicionado ao catálogo.
-[AVISO] pikachu já está no catálogo.
-```
-
----
-
 ### Listar catálogo
 
 **Saída esperada:**
 ```
 Catálogo atual:
-#25 - pikachu | Tipos: electric | Altura: 4 | Peso: 60
-#4 - charmander | Tipos: fire | Altura: 6 | Peso: 85
-#1 - bulbasaur | Tipos: grass, poison | Altura: 7 | Peso: 69
-#150 - mewtwo | Tipos: psychic | Altura: 20 | Peso: 1220
-```
-
----
-
-### Remoção
-
-**Entrada testada:**
-```
-remover ID 25
-```
-
-**Saída esperada:**
-```
-[OK] Pokémon removido do catálogo.
-```
-
----
-
-### Remoção de ID inexistente
-
-**Entrada testada:**
-```
-remover ID 9999
-```
-
-**Saída esperada:**
-```
-[AVISO] Nenhum Pokémon encontrado com esse ID.
+#93 - haunter | Tipos: ghost, poison | Altura: 16 | Peso: 1
+#128 - tauros | Tipos: normal | Altura: 14 | Peso: 884
+#133 - eevee | Tipos: normal | Altura: 3 | Peso: 65
+#60 - poliwag | Tipos: water | Altura: 6 | Peso: 124
+#59 - arcanine | Tipos: fire | Altura: 19 | Peso: 1550
 ```
 
 ---
@@ -193,10 +176,29 @@ remover ID 9999
 **Saída esperada:**
 ```
 --- Estatísticas do Catálogo ---
-Total de Pokémon: 4
-Peso total: 1434
+Total de Pokémon: 5
+Peso total: 2624
 Todos com nome válido: true
 --------------------------------
+```
+
+---
+
+### Remoção (remove o último sorteado)
+
+**Saída esperada:**
+```
+>> Demonstrando remoção — removendo o último sorteado: arcanine
+[OK] arcanine removido do catálogo.
+```
+
+---
+
+### Remoção de ID inexistente
+
+**Saída esperada:**
+```
+[AVISO] Nenhum Pokémon encontrado com esse ID.
 ```
 
 ---
@@ -206,8 +208,9 @@ Todos com nome válido: true
 | Método | Onde | Finalidade |
 |---|---|---|
 | `map` | PokeApiService | Transforma `types` da API em array de strings |
+| `sort` | main.ts | Embaralha a lista de Pokémon para o sorteio |
 | `some` | BoxService | Verifica duplicidade antes de adicionar |
-| `filter` | BoxService | Remove Pokémon por ID; filtra por tipo |
+| `filter` | BoxService | Remove Pokémon por ID ou nome; filtra por tipo |
 | `find` | BoxService | Busca Pokémon pelo ID |
 | `every` | BoxService | Valida se todos têm nome |
 | `reduce` | BoxService | Calcula peso total do catálogo |
