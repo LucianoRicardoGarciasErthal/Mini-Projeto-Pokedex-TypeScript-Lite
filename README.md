@@ -231,10 +231,10 @@ docs/readme
 
 ## Quadro Kanban
 
-[Link do quadro Kanban](https://trello.com/seu-quadro-aqui)
+Link do quadro Kanban - [ https://trello.com/u/lucianoricardogarciaserthal1/boards ]
 
 ---
 
 ## Autor
 
-Seu Nome — [GitHub](https://github.com/seu-usuario)
+Luciano Ricardo Garcias Erthal — [ https://github.com/LucianoRicardoGarciasErthal ]
