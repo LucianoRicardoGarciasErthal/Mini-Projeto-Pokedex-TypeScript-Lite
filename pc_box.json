@@ -1,1 +1,49 @@
-[]
+[
+  {
+    "id": 59,
+    "nome": "arcanine",
+    "tipos": [
+      "fire"
+    ],
+    "altura": 19,
+    "peso": 1550
+  },
+  {
+    "id": 1,
+    "nome": "bulbasaur",
+    "tipos": [
+      "grass",
+      "poison"
+    ],
+    "altura": 7,
+    "peso": 69
+  },
+  {
+    "id": 74,
+    "nome": "geodude",
+    "tipos": [
+      "rock",
+      "ground"
+    ],
+    "altura": 4,
+    "peso": 200
+  },
+  {
+    "id": 27,
+    "nome": "sandshrew",
+    "tipos": [
+      "ground"
+    ],
+    "altura": 6,
+    "peso": 120
+  },
+  {
+    "id": 110,
+    "nome": "weezing",
+    "tipos": [
+      "poison"
+    ],
+    "altura": 12,
+    "peso": 95
+  }
+]
