@@ -28,6 +28,8 @@ async function main(): Promise<void> {
   const catalogo = new BoxService();
   const controller = new TerminalController(catalogo);
 
+  await catalogo.carregar(); // salvar dados no arquivo
+
   // Sorteia 5 IDs únicos entre 1 e 151 (Pokémon da 1ª geração)
   const idsSorteados = sortearIds(5, 1, 151);
 
