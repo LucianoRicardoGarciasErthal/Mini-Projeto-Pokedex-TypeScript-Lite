@@ -14,7 +14,7 @@ export class TerminalController {
   public async buscarEAdicionar(nomeOuId: string): Promise<void> {
     const pokemon = await buscarPokemon(nomeOuId);
     if (pokemon !== null) {
-      this.catalogo.adicionar(pokemon);
+      await this.catalogo.adicionar(pokemon);
     }
   }
 
@@ -23,9 +23,14 @@ export class TerminalController {
     this.catalogo.listar();
   }
 
-  // Remove pelo ID e exibe mensagem
-  public removerPorId(id: number): void {
-    this.catalogo.remover(id);
+  // Remove pelo ID e salva no arquivo
+  public async removerPorId(id: number): Promise<void> {
+    await this.catalogo.remover(id);
+  }
+
+  // Remove pelo nome e salva no arquivo
+  public async removerPorNome(nome: string): Promise<void> {
+    await this.catalogo.removerPorNome(nome);
   }
 
   // Exibe estatísticas do catálogo
